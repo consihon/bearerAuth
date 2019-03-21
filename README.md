@@ -1,11 +1,11 @@
-# lab-09
-![CF](http://i.imgur.com/7v5ASc8.png) LAB 09
+# lab-13
+![CF](http://i.imgur.com/7v5ASc8.png) LAB 13
 ==============================================
 
-## LAB 09
-[![Build Status]
+## LAB 13
+[![Build Status] [![Build Status](https://travis-ci.org/consihon/bearerAuth.svg?branch=master)](https://travis-ci.org/consihon/bearerAuth)
 
-### Author: connor sihon, erik johnson
+### Author: Connor Sihon, Erik Johnson
 ##### 
 ### 
 * [repo] https://github.com/consihon/bearerAuth
