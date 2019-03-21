@@ -3,7 +3,7 @@
 ==============================================
 
 ## LAB 13
-[![Build Status] [![Build Status](https://travis-ci.org/consihon/bearerAuth.svg?branch=master)](https://travis-ci.org/consihon/bearerAuth)
+[![Build Status](https://travis-ci.org/consihon/bearerAuth.svg?branch=master)](https://travis-ci.org/consihon/bearerAuth)
 
 ### Author: Connor Sihon, Erik Johnson
 ##### 
