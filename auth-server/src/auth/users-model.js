@@ -52,6 +52,7 @@ users.statics.authenticateToken = function(token) {
     }
   }else{
     let parsedToken = jwt.verify(token, process.env.SECRET);
+    // console.log(parsedToken);
     let query = {_id: parsedToken.id};
     return this.findOne(query);
   }

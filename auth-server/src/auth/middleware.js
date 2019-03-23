@@ -27,15 +27,18 @@ module.exports = (req, res, next) => {
     let bufferString = base64Buffer.toString();    // john:mysecret
     let [username, password] = bufferString.split(':'); // john='john'; mysecret='mysecret']
     let auth = {username,password}; // { username:'john', password:'mysecret' }
-    
     return User.authenticateBasic(auth)
       .then(user => _authenticate(user) )
       .catch(next);
   }
 
   function _authBearer(str){
+
     return User.authenticateToken(str)
-        .then(user => _authenticate(user) )
+        .then(user => {
+          // console.log(user);
+          _authenticate(user);
+        })
         .catch(next);
   }
 
