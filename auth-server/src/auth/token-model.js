@@ -15,6 +15,6 @@ tokens.statics.check = function(token){
             return true;
         }
     });
-}
+};
 
 module.exports = mongoose.model('tokens', tokens);

@@ -3,7 +3,7 @@
 const User = require('./users-model.js');
 
 module.exports = (req, res, next) => {
-  
+
   try {
     let [authType, authString] = req.headers.authorization.split(/\s+/);
     
@@ -39,15 +39,20 @@ module.exports = (req, res, next) => {
         .catch(next);
   }
 
-  function _authenticate(user) {
+  function _authenticate(user, authKey=false) {
     if(user) {
       req.user = user;
-      req.token = user.generateToken();
+      req.token = user.generateToken(authKey);
       next();
     }
     else {
       _authError();
     }
+  }
+
+  function _authKey(str){
+    return User.authenticateToken(str)
+        .then (user=> _authenticate(user, true))
   }
   
   function _authError() {
