@@ -7,14 +7,18 @@ const tokens = new mongoose.Schema({
 });
 
 tokens.statics.check = function(token){
+    console.log('check', token);
+
     let query = {string:token};
-    tokens.deleteOne(query, function(err, obj){
-        if (err) {
-            return err;
-        }else{
-            return true;
-        }
-    });
-}
+    let find = this.find(query);
+    if(find) {
+        find.remove().exec();
+        return true;
+    } else {
+        return false;
+    }
+
+
+};
 
 module.exports = mongoose.model('tokens', tokens);

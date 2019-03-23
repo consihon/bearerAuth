@@ -41,9 +41,13 @@ users.statics.createFromOauth = function(email) {
 };
 
 users.statics.authenticateToken = function(token) {
+
   let isValid= tokens.check(token);
+  
   if (isValid){
+    // console.log("is this working?");
     let parsedToken = jwt.verify(token, process.env.SECRET);
+    // console.log(parsedToken);
     let query = {_id: parsedToken.id};
     return this.findOne(query);
   }else{
