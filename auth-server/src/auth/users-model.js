@@ -3,6 +3,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const tokens = require('./token-model.js');
 
 const users = new mongoose.Schema({
   username: {type:String, required:true, unique:true},
@@ -40,9 +41,15 @@ users.statics.createFromOauth = function(email) {
 };
 
 users.statics.authenticateToken = function(token) {
-  let parsedToken = jwt.verify(token,process.env.SECRET);
-  let query = {_id:parsedToken.id};
-  return this.findOne(query);
+  let isValid= tokens.check(token);
+  if (isValid){
+    let parsedToken = jwt.verify(token, process.env.SECRET);
+    let query = {_id: parsedToken.id};
+    return this.findOne(query);
+  }else{
+    console.log(isValid);
+  }
+
 };
 
 users.statics.authenticateBasic = function(auth) {
@@ -57,14 +64,19 @@ users.methods.comparePassword = function(password) {
     .then( valid => valid ? this : null);
 };
 
-users.methods.generateToken = function() {
-  
+users.methods.generateToken = function(authKey='false') {
   let token = {
     id: this._id,
     role: this.role,
   };
-  
-  return jwt.sign(token, process.env.SECRET, {expiresIn: '.25h'});
+  if(authKey){
+    token.authKey=true;
+    token = jwt.sign(token, process.env.SECRET);
+  }else {
+    token = jwt.sign(token, process.env.SECRET, {expiresIn: '.25h'});
+    tokens.insertOne(token);
+  }
+  return token;
 };
 
 module.exports = mongoose.model('users', users);
