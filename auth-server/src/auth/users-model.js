@@ -41,19 +41,21 @@ users.statics.createFromOauth = function(email) {
 };
 
 users.statics.authenticateToken = function(token) {
-
-  let isValid= tokens.check(token);
-  
-  if (isValid){
-    // console.log("is this working?");
+  if (!token.authKey) {
+    let isValid = tokens.check(token);
+    if (isValid) {
+      let parsedToken = jwt.verify(token, process.env.SECRET);
+      let query = {_id: parsedToken.id};
+      return this.findOne(query);
+    } else {
+      console.log(isValid);
+    }
+  }else{
     let parsedToken = jwt.verify(token, process.env.SECRET);
     // console.log(parsedToken);
     let query = {_id: parsedToken.id};
     return this.findOne(query);
-  }else{
-    console.log(isValid);
   }
-
 };
 
 users.statics.authenticateBasic = function(auth) {
