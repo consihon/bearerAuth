@@ -5,7 +5,7 @@
 ## LAB 13
 [![Build Status](https://travis-ci.org/consihon/bearerAuth.svg?branch=master)](https://travis-ci.org/consihon/bearerAuth)
 
-### Author: Connor Sihon, Erik Johnson
+### Author: Connor Sihon, Erik Johnson, Richard Bellamy
 ##### 
 ### 
 * [repo] https://github.com/consihon/bearerAuth
