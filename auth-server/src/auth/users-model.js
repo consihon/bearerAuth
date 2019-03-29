@@ -43,12 +43,12 @@ users.statics.createFromOauth = function(email) {
 
 users.statics.authenticateToken = function(token) {
   if(usedTokens.has(token)){
-    return Promise.reject('invalid token');
+    return Promise.reject('token has already been used');
   }
   try {
     // console.log("is this working?");
     let parsedToken = jwt.verify(token, process.env.SECRET);
-    if(token.authKey){
+    if(parsedToken.type !== 'key'){
       usedTokens.add(token);
     }
     // console.log(parsedToken);
@@ -71,13 +71,14 @@ users.methods.comparePassword = function(password) {
     .then( valid => valid ? this : null);
 };
 
-users.methods.generateToken = function(authKey='false') {
+users.methods.generateToken = function(type) {
   let token = {
     id: this._id,
     role: this.role,
+    // authKey: authKey,
+    type: type || 'token',
   };
-  if(authKey){
-    token.authKey=true;
+  if(token.type === 'key'){
     token = jwt.sign(token, process.env.SECRET);
   }else {
     token = jwt.sign(token, process.env.SECRET, {expiresIn: '.25h'});
@@ -86,3 +87,4 @@ users.methods.generateToken = function(authKey='false') {
 };
 
 module.exports = mongoose.model('users', users);
+
