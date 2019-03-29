@@ -3,7 +3,8 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const tokens = require('./token-model.js');
+
+const usedTokens = new Set();
 
 const users = new mongoose.Schema({
   username: {type:String, required:true, unique:true},
@@ -41,19 +42,21 @@ users.statics.createFromOauth = function(email) {
 };
 
 users.statics.authenticateToken = function(token) {
-  console.log('authenticating token');
-  let isValid= tokens.check(token);
-  console.log(isValid);
-  if (isValid){
+  if(usedTokens.has(token)){
+    return Promise.reject('invalid token');
+  }
+  try {
     // console.log("is this working?");
     let parsedToken = jwt.verify(token, process.env.SECRET);
+    if(token.authKey){
+      usedTokens.add(token);
+    }
     // console.log(parsedToken);
     let query = {_id: parsedToken.id};
     return this.findOne(query);
-  }else{
-    console.log(isValid);
+  }catch (e) {
+    throw new Error('invalid token');
   }
-
 };
 
 users.statics.authenticateBasic = function(auth) {
@@ -78,7 +81,6 @@ users.methods.generateToken = function(authKey='false') {
     token = jwt.sign(token, process.env.SECRET);
   }else {
     token = jwt.sign(token, process.env.SECRET, {expiresIn: '.25h'});
-    tokens.insertOne(token);
   }
   return token;
 };
